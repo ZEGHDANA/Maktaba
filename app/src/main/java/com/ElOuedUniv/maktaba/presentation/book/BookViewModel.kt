@@ -23,48 +23,29 @@ class BookViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(BookUiState())
     val uiState: StateFlow<BookUiState> = _uiState.asStateFlow()
 
-    init {
-        loadBooks()
-    }
+    init { loadBooks() }
 
     fun loadBooks() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             getBooksUseCase()
-                .catch { e ->
-                    _uiState.update { it.copy(isLoading = false, errorMessage = e.message) }
-                }
-                .collect { bookList ->
-                    _uiState.update { it.copy(isLoading = false, books = bookList) }
-                }
+                .catch { e -> _uiState.update { it.copy(isLoading = false, errorMessage = e.message) } }
+                .collect { bookList -> _uiState.update { it.copy(isLoading = false, books = bookList) } }
         }
     }
 
-    /**
-     * Exercise 3 - Handle UI Actions
-     */
     fun onAction(action: BookUiAction) {
         when (action) {
-            BookUiAction.RefreshBooks -> refreshBooks()
-            BookUiAction.OnAddBookClick -> {
-                _uiState.update { it.copy(isAddingBook = true) }
-            }
-            BookUiAction.OnDismissAddBook -> {
-                _uiState.update { it.copy(isAddingBook = false) }
-            }
+            BookUiAction.RefreshBooks -> loadBooks()
+            BookUiAction.OnAddBookClick -> _uiState.update { it.copy(isAddingBook = true) }
+            BookUiAction.OnDismissAddBook -> _uiState.update { it.copy(isAddingBook = false) }
+            BookUiAction.ToggleColumns -> _uiState.update { it.copy(isTwoColumns = !it.isTwoColumns) }
             is BookUiAction.OnAddBookConfirm -> {
-                val newBook = Book(
-                    isbn = action.isbn,
-                    title = action.title,
-                    nbPages = action.nbPages
-                )
-                addBookUseCase(newBook)
+                addBookUseCase(Book(isbn = action.isbn, title = action.title, nb_pages = action.nbPages))
                 _uiState.update { it.copy(isAddingBook = false) }
             }
         }
     }
 
-    fun refreshBooks() {
-        loadBooks()
-    }
+    fun refreshBooks() = loadBooks()
 }

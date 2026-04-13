@@ -14,29 +14,26 @@ class CategoryRepositoryImpl @Inject constructor() : CategoryRepository {
         Category(
             id = "1",
             name = "Programming",
-            description = "Books about software development and coding",
-            iconRes = android.R.drawable.ic_menu_preferences
+            description = "Books about software development and coding"
         ),
         Category(
             id = "2",
             name = "Algorithms",
-            description = "Books about algorithms and data structures",
-            iconRes = android.R.drawable.ic_menu_compass
+            description = "Books about algorithms and data structures"
         ),
         Category(
             id = "3",
             name = "Databases",
-            description = "Books about database design and management",
-            iconRes = android.R.drawable.ic_menu_save
+            description = "Books about database design and management"
         )
     )
 
     private val categoriesFlow = MutableSharedFlow<List<Category>>(replay = 1).apply {
         tryEmit(_categoriesList)
     }
-    
+
     override fun getAllCategories(): Flow<List<Category>> = flow {
-        delay(2000) // Simulate delay
+        delay(2000)
         emitAll(categoriesFlow)
     }
 

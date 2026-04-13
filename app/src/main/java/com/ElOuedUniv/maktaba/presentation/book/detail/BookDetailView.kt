@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -35,14 +34,14 @@ fun BookDetailView(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { 
+                title = {
                     Text(
-                        "BOOK DETAILS", 
+                        "BOOK DETAILS",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 2.sp
                         )
-                    ) 
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -81,9 +80,9 @@ fun BookDetailView(
                         elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
-                            if (book.imageUrl != null) {
+                            if (book.image_url != null) {
                                 AsyncImage(
-                                    model = book.imageUrl,
+                                    model = book.image_url,
                                     contentDescription = book.title,
                                     modifier = Modifier.fillMaxSize(),
                                     contentScale = ContentScale.Crop
@@ -124,11 +123,11 @@ fun BookDetailView(
                             MetadataItem(
                                 icon = Icons.Default.MenuBook,
                                 label = "Reading Status:",
-                                value = if (book.nbPages > 0) "75% Reading" else "Not started"
+                                value = if (book.nb_pages > 0) "75% Reading" else "Not started"
                             ) {
                                 Spacer(modifier = Modifier.height(8.dp))
                                 LinearProgressIndicator(
-                                    progress = { if (book.nbPages > 0) 0.75f else 0f },
+                                    progress = { if (book.nb_pages > 0) 0.75f else 0f },
                                     modifier = Modifier.fillMaxWidth().height(8.dp),
                                     strokeCap = androidx.compose.ui.graphics.StrokeCap.Round,
                                     color = MaterialTheme.colorScheme.primary,
@@ -146,7 +145,7 @@ fun BookDetailView(
                                     MetadataItem(
                                         icon = Icons.Default.Straighten, // Ruler
                                         label = "Pages:",
-                                        value = if (book.nbPages > 0) "${book.nbPages}" else "Not set"
+                                        value = if (book.nb_pages > 0) "${book.nb_pages}" else "Not set"
                                     )
                                 }
                                 Box(modifier = Modifier.weight(1f)) {
